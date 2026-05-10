@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMARA — Dossier III: The Platforms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#04060F;--bg2:#07091A;--bg3:#0A0C22;
+  --card:rgba(255,255,255,0.032);--card-h:rgba(255,255,255,0.055);
+  --b:rgba(255,255,255,0.06);--bv:rgba(139,92,246,0.25);--bb:rgba(0,180,255,0.2);
+  --violet:#8B5CF6;--violet-d:#6D28D9;--violet-s:rgba(139,92,246,0.1);
+  --blue:#00B4FF;--blue-d:#0077AA;--blue-s:rgba(0,180,255,0.1);
+  --gold:#F59E0B;--gold-d:#B45309;--gold-s:rgba(245,158,11,0.1);
+  --green:#00E5A0;--green-d:#00A370;--green-s:rgba(0,229,160,0.1);
+  --danger:#EF4444;--danger-s:rgba(239,68,68,0.1);
+  --tp:#EEF2FF;--ts:#94A3B8;--tm:#475569;
+  --fd:'Bebas Neue',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--tp);font-family:var(--fb);font-size:15px;line-height:1.7;overflow-x:hidden}
+::selection{background:rgba(139,92,246,0.35);color:#fff}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--violet-d);border-radius:2px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;
+  justify-content:space-between;padding:14px 48px;background:rgba(4,6,15,0.92);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--b);transition:all 0.3s}
+.nlogo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nmark{width:34px;height:34px;background:linear-gradient(135deg,var(--violet),var(--violet-d));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:17px;color:#fff;box-shadow:0 0 24px rgba(139,92,246,0.4)}
+.ntext{font-family:var(--fd);font-size:20px;letter-spacing:3px;color:var(--tp)}
+.nsub{font-size:9px;letter-spacing:2px;color:var(--tm);font-family:var(--fm);
+  text-transform:uppercase;display:block;margin-top:-2px}
+.nlinks{display:flex;align-items:center;gap:26px;list-style:none}
+.nlinks a{text-decoration:none;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ts);transition:color 0.2s;font-weight:500}
+.nlinks a:hover{color:var(--violet)}
+.nbadge{font-family:var(--fm);font-size:10px;color:var(--violet);padding:4px 12px;
+  border:1px solid var(--bv);border-radius:4px;letter-spacing:1px}
+
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;
+  overflow:hidden;padding:110px 48px 80px}
+.hbg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 15% 50%,rgba(139,92,246,0.08) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 60% at 85% 30%,rgba(0,180,255,0.05) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 50% at 50% 90%,rgba(0,229,160,0.04) 0%,transparent 50%),
+  linear-gradient(180deg,#04060F 0%,#070A1A 100%)}
+.hgrid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(139,92,246,0.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(139,92,246,0.04) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(ellipse at 25% 50%,black 0%,transparent 65%)}
+.hcontent{position:relative;z-index:2;max-width:1200px;margin:0 auto;
+  width:100%;display:grid;grid-template-columns:1fr 380px;gap:64px;align-items:center}
+.heyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.heline{width:36px;height:1px;background:var(--violet)}
+.hetext{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--violet)}
+.htitle{font-family:var(--fd);font-size:clamp(48px,6vw,84px);line-height:0.92;
+  letter-spacing:2px;color:var(--tp);margin-bottom:20px}
+.htitle .violet{color:var(--violet)}.htitle .blue{color:var(--blue)}.htitle .green{color:var(--green)}
+.hdesc{font-size:15px;line-height:1.85;color:var(--ts);max-width:520px;margin-bottom:32px}
+.hmeta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hmi{display:flex;flex-direction:column;gap:2px}
+.hml{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm)}
+.hmv{font-family:var(--fm);font-size:13px;color:var(--violet);font-weight:500}
+.hdiv{width:1px;height:28px;background:var(--b)}
+.platform-trio{display:flex;flex-direction:column;gap:12px}
+.ptile{border-radius:14px;padding:18px 20px;border:1px solid var(--b);
+  background:var(--card);transition:all 0.3s;cursor:default;position:relative;overflow:hidden}
+.ptile:hover{transform:translateX(6px)}
+.ptile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.pt-connect::before{background:var(--green)}
+.pt-ops::before{background:var(--blue)}
+.pt-command::before{background:var(--gold)}
+.ptile-name{font-family:var(--fd);font-size:20px;letter-spacing:2px;margin-bottom:3px}
+.pt-connect .ptile-name{color:var(--green)}
+.pt-ops .ptile-name{color:var(--blue)}
+.pt-command .ptile-name{color:var(--gold)}
+.ptile-role{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--tm);margin-bottom:7px}
+.ptile-desc{font-size:12px;color:var(--ts);line-height:1.6}
+.ptile-users{font-family:var(--fm);font-size:10px;margin-top:8px}
+.pt-connect .ptile-users{color:var(--green)}
+.pt-ops .ptile-users{color:var(--blue)}
+.pt-command .ptile-users{color:var(--gold)}
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0.35;animation:bou 2.2s infinite}
+.sarrow{width:18px;height:18px;border-right:1px solid var(--ts);
+  border-bottom:1px solid var(--ts);transform:rotate(45deg)}
+.shint-t{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm)}
+@keyframes bou{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+
+section{padding:90px 48px}
+.container{max-width:1200px;margin:0 auto}
+.seyebrow{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.snum{font-family:var(--fm);font-size:10px;color:var(--violet);letter-spacing:2px}
+.sline{width:28px;height:1px;background:var(--bv)}
+.stag{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--tm)}
+.stitle{font-family:var(--fd);font-size:clamp(34px,4.5vw,58px);letter-spacing:2px;line-height:1;
+  color:var(--tp);margin-bottom:14px}
+.stitle .violet{color:var(--violet)}.stitle .blue{color:var(--blue)}
+.stitle .gold{color:var(--gold)}.stitle .green{color:var(--green)}
+.ssub{font-size:15px;color:var(--ts);max-width:640px;line-height:1.85;margin-bottom:52px}
+
+.card{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:24px;
+  transition:all 0.3s;position:relative}
+.card:hover{background:var(--card-h);border-color:rgba(139,92,246,0.15);transform:translateY(-2px)}
+.cshine{position:absolute;top:0;left:20px;right:20px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--violet),transparent);opacity:0;transition:opacity 0.3s}
+.card:hover .cshine{opacity:1}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+.cw{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:22px}
+.ct{font-family:var(--fm);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ts);margin-bottom:3px}
+.cs{font-size:11px;color:var(--tm);margin-bottom:16px}
+.ch{position:relative;height:240px}
+.csrc{margin-top:10px;font-size:10px;color:var(--tm);font-family:var(--fm)}
+
+.dr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04)}
+.dr:last-child{border-bottom:none}
+.drl{font-size:13px;color:var(--ts)}
+.drv{font-family:var(--fm);font-size:13px;font-weight:500}
+.drv.v{color:var(--violet)}.drv.b{color:var(--blue)}.drv.g{color:var(--gold)}
+.drv.gr{color:var(--green)}.drv.r{color:var(--danger)}
+.drbar{width:100%;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:5px;overflow:hidden}
+.drfill{height:100%;border-radius:2px}
+
+.co{border-radius:12px;padding:20px 24px;margin:22px 0;position:relative;overflow:hidden}
+.co::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.co-v{background:var(--violet-s);border:1px solid rgba(139,92,246,0.18)}.co-v::before{background:var(--violet)}
+.co-b{background:var(--blue-s);border:1px solid rgba(0,180,255,0.18)}.co-b::before{background:var(--blue)}
+.co-g{background:var(--gold-s);border:1px solid rgba(245,158,11,0.18)}.co-g::before{background:var(--gold)}
+.co-gr{background:var(--green-s);border:1px solid rgba(0,229,160,0.18)}.co-gr::before{background:var(--green)}
+.co-r{background:var(--danger-s);border:1px solid rgba(239,68,68,0.18)}.co-r::before{background:var(--danger)}
+.colbl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
+.co-v .colbl{color:var(--violet)}.co-b .colbl{color:var(--blue)}.co-g .colbl{color:var(--gold)}
+.co-gr .colbl{color:var(--green)}.co-r .colbl{color:var(--danger)}
+.cotxt{font-size:13px;line-height:1.75;color:var(--ts)}.cotxt strong{color:var(--tp)}
+
+.spec-table{width:100%;border-collapse:collapse;font-size:12px;display:block;
+  overflow-x:auto;-webkit-overflow-scrolling:touch}
+.spec-table thead,.spec-table tbody,.spec-table tr{display:table;width:100%;table-layout:fixed}
+.spec-table th{font-family:var(--fm);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--tm);padding:9px 12px;text-align:left;border-bottom:1px solid var(--b);white-space:nowrap}
+.spec-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--ts);
+  vertical-align:top;line-height:1.5}
+.spec-table tr:hover td{background:rgba(255,255,255,0.02)}
+.spec-table .hl td{background:rgba(139,92,246,0.04)}
+.spec-table .hl td:first-child{border-left:2px solid var(--violet)}
+.spec-table .rec{color:var(--violet);font-weight:600;font-family:var(--fm);font-size:10px}
+.spec-table .good{color:var(--green);font-family:var(--fm);font-size:11px}
+
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;
+  display:flex;gap:12px;align-items:flex-start;transition:border-color 0.2s}
+.feat:hover{border-color:rgba(139,92,246,0.2)}
+.feat-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:17px;flex-shrink:0}
+.feat-title{font-size:13px;font-weight:600;color:var(--tp);margin-bottom:3px}
+.feat-desc{font-size:11px;color:var(--ts);line-height:1.6}
+
+.screen-mock{border-radius:16px;overflow:hidden;border:1px solid var(--b);
+  background:var(--bg2);position:relative}
+.screen-bar{height:36px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--b);
+  display:flex;align-items:center;padding:0 14px;gap:7px}
+.sb-dot{width:8px;height:8px;border-radius:50%}
+.sb-url{flex:1;margin:0 12px;height:18px;background:rgba(255,255,255,0.06);
+  border-radius:4px;display:flex;align-items:center;padding:0 8px}
+.sb-url span{font-family:var(--fm);font-size:9px;color:var(--tm);letter-spacing:1px}
+.screen-content{padding:16px}
+.mock-nav{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:rgba(0,0,0,0.3);border-radius:8px;margin-bottom:12px}
+.mock-logo{font-family:var(--fd);font-size:14px;letter-spacing:2px}
+.mock-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.mock-stat{background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;border:1px solid var(--b)}
+.mock-stat-lbl{font-family:var(--fm);font-size:7px;letter-spacing:1px;color:var(--tm);margin-bottom:4px}
+.mock-stat-val{font-family:var(--fd);font-size:20px;letter-spacing:1px}
+.mock-chart-bar{display:flex;align-items:flex-end;gap:4px;height:48px;
+  background:rgba(255,255,255,0.02);border-radius:6px;padding:8px 6px 4px}
+.mock-bar{flex:1;border-radius:2px 2px 0 0;opacity:0.7}
+.mock-row{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:6px;
+  margin-bottom:6px;border:1px solid rgba(255,255,255,0.04)}
+.mock-lbl{font-size:10px;color:var(--ts)}
+.mock-val{font-family:var(--fm);font-size:11px}
+.mock-badge{font-family:var(--fm);font-size:8px;padding:2px 8px;border-radius:3px}
+
+.auth-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:8px}
+.auth-step{flex-shrink:0;width:140px;text-align:center;position:relative}
+.auth-step::after{content:'';position:absolute;top:20px;right:-20px;width:40px;
+  height:1px;background:linear-gradient(90deg,var(--violet),transparent)}
+.auth-step:last-child::after{display:none}
+.auth-icon{width:40px;height:40px;border-radius:50%;background:var(--violet-s);
+  border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;
+  font-size:16px;margin:0 auto 8px}
+.auth-label{font-family:var(--fm);font-size:9px;letter-spacing:1px;color:var(--ts);
+  text-transform:uppercase}
+.auth-desc{font-size:10px;color:var(--tm);margin-top:3px;line-height:1.4}
+
+.db-row{display:flex;gap:12px;align-items:flex-start;padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04)}
+.db-row:last-child{border-bottom:none}
+.db-icon{width:36px;height:36px;border-radius:8px;background:var(--violet-s);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.db-title{font-size:13px;font-weight:600;color:var(--tp);margin-bottom:3px}
+.db-desc{font-size:12px;color:var(--ts);line-height:1.6}
+.db-code{font-family:var(--fm);font-size:10px;color:var(--green);background:rgba(0,229,160,0.07);
+  padding:2px 8px;border-radius:4px;display:inline-block;margin-top:5px;
+  border:1px solid rgba(0,229,160,0.15)}
+
+.stack-item{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.stack-item:last-child{border-bottom:none}
+.si-label{font-size:13px;color:var(--ts)}
+.si-tech{font-family:var(--fm);font-size:11px;color:var(--violet)}
+.si-why{font-size:11px;color:var(--tm);max-width:200px;text-align:right;line-height:1.4}
+
+.design-token{background:var(--card);border:1px solid var(--b);border-radius:10px;
+  padding:14px;display:flex;align-items:center;gap:12px}
+.dt-swatch{width:36px;height:36px;border-radius:8px;flex-shrink:0}
+.dt-name{font-family:var(--fd);font-size:16px;letter-spacing:1px;color:var(--tp);margin-bottom:2px}
+.dt-hex{font-family:var(--fm);font-size:10px;color:var(--tm)}
+.dt-use{font-size:11px;color:var(--ts)}
+
+.pay-method{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:16px;
+  display:flex;gap:12px;align-items:flex-start}
+.pm-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;flex-shrink:0;background:var(--green-s)}
+.pm-name{font-size:13px;font-weight:600;color:var(--tp);margin-bottom:3px}
+.pm-desc{font-size:11px;color:var(--ts);line-height:1.6}
+.pm-tag{font-family:var(--fm);font-size:9px;padding:2px 7px;border-radius:3px;
+  background:var(--green-s);color:var(--green);border:1px solid rgba(0,229,160,0.2);
+  display:inline-block;margin-top:6px}
+
+footer{background:var(--bg);border-top:1px solid var(--b);padding:44px 48px}
+.footer-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:24px}
+.fbrand{font-family:var(--fd);font-size:22px;letter-spacing:4px;color:var(--violet)}
+.fbsub{font-family:var(--fm);font-size:9px;color:var(--tm);letter-spacing:1.5px;margin-top:3px}
+.fslogan{font-family:var(--fm);font-size:11px;color:var(--violet);letter-spacing:2px;margin-top:6px}
+.fcopy{font-family:var(--fm);font-size:10px;color:var(--tm);text-align:center;line-height:1.8}
+.fid{font-family:var(--fm);font-size:10px;color:var(--tm);text-align:right;line-height:1.8}
+.fnext{color:var(--violet);margin-top:4px;display:block}
+
+.fi{transition:opacity 0.7s ease,transform 0.7s ease}
+.js-ready .fi{opacity:0;transform:translateY(20px)}
+.js-ready .fi.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}
+
+@media(max-width:1024px){
+  .hcontent{grid-template-columns:1fr;gap:36px}
+  .g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .g4{grid-template-columns:1fr 1fr}
+  nav{padding:12px 24px}.nlinks{display:none}
+  section{padding:60px 24px}
+}
+@media(max-width:640px){
+  .g3,.feat-grid,.g4{grid-template-columns:1fr}
+  .htitle{font-size:44px}
+  .auth-flow{flex-direction:column;align-items:flex-start;gap:12px}
+  .auth-step{width:100%;text-align:left;display:flex;gap:12px;align-items:center}
+  .auth-step::after{display:none}
+  .auth-icon{margin:0;flex-shrink:0}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nlogo">
+    <div class="nmark">A</div>
+    <div>
+      <div class="ntext">AMARA</div>
+      <span class="nsub">Power Systems Nigeria</span>
+    </div>
+  </a>
+  <ul class="nlinks">
+    <li><a href="#design-system">Design</a></li>
+    <li><a href="#connect">Connect</a></li>
+    <li><a href="#ops">Ops</a></li>
+    <li><a href="#command">Command</a></li>
+    <li><a href="#auth">Auth</a></li>
+    <li><a href="#database">Database</a></li>
+    <li><a href="#stack">Tech Stack</a></li>
+  </ul>
+  <div class="nbadge">DOSSIER III — THE PLATFORMS</div>
+</nav>
+
+<section id="hero">
+  <div class="hbg"></div>
+  <div class="hgrid"></div>
+  <div class="hcontent">
+    <div>
+      <div class="heyebrow"><div class="heline"></div>
+        <span class="hetext">AMARA Platform Architecture — Three Interface Layers</span></div>
+      <h1 class="htitle">THE<br><span class="violet">THREE</span><br><span class="blue">PLATFORMS</span></h1>
+      <p class="hdesc">The AMARA Grid and NEXUS AI are the engine and brain. The three platforms are the voice — translating the intelligence of the system into meaningful, actionable, beautiful experiences for every person it touches: from a family in Kano managing their monthly units, to an operations engineer in Lagos resolving a fault ticket, to an executive in Abuja overseeing the performance of the entire national grid.</p>
+      <div class="hmeta">
+        <div class="hmi"><span class="hml">Platforms</span><span class="hmv">3 Distinct Interfaces</span></div>
+        <div class="hdiv"></div>
+        <div class="hmi"><span class="hml">End Users</span><span class="hmv">50M+ Consumers</span></div>
+        <div class="hdiv"></div>
+        <div class="hmi"><span class="hml">Staff Accounts</span><span class="hmv">25,000+</span></div>
+        <div class="hdiv"></div>
+        <div class="hmi"><span class="hml">Document</span><span class="hmv">Dossier III of III</span></div>
+      </div>
+    </div>
+    <div class="platform-trio">
+      <div class="ptile pt-connect">
+        <div class="ptile-name">AMARA CONNECT</div>
+        <div class="ptile-role">Consumer Platform — Mobile + Desktop</div>
+        <div class="ptile-desc">Remote power control, real-time consumption, payments, smart circuit monitoring, family accounts, grid status transparency, and Nigerian payment integration.</div>
+        <div class="ptile-users">→ 50 Million users at full scale</div>
+      </div>
+      <div class="ptile pt-ops">
+        <div class="ptile-name">AMARA OPS</div>
+        <div class="ptile-role">Staff Platform — Desktop Only</div>
+        <div class="ptile-desc">AI-triaged ticket management, field team dispatch, customer account management, real-time NEXUS alerts, fault resolution tracking, and operational KPI dashboards.</div>
+        <div class="ptile-users">→ 25,000+ staff accounts</div>
+      </div>
+      <div class="ptile pt-command">
+        <div class="ptile-name">AMARA COMMAND</div>
+        <div class="ptile-role">Management Platform — Desktop Only</div>
+        <div class="ptile-desc">National grid oversight, financial performance, staff management, export monitoring, environmental reporting, phase progress tracking, and strategic executive intelligence.</div>
+        <div class="ptile-users">→ Executive and senior management tier</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span class="shint-t">Scroll</span><div class="sarrow"></div></div>
+</section>
+
+<!-- DESIGN SYSTEM -->
+<section id="design-system" style="background:var(--bg2)">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">01</span><div class="sline"></div><span class="stag">Design Language</span></div>
+    <h2 class="stitle fi">THE AMARA <span class="violet">DESIGN SYSTEM</span></h2>
+    <p class="ssub fi">Every component, colour, motion, and typographic choice across all three platforms follows a single, unified design system — AMARA DS. Consistency is not aesthetic preference; it is a trust mechanism. Users moving between AMARA Connect and AMARA Ops must feel they are in the same world, even though the information density and purpose are entirely different.</p>
+
+    <div class="g2 fi" style="margin-bottom:24px;align-items:start">
+      <div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:16px">COLOUR PALETTE</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          <div class="design-token"><div class="dt-swatch" style="background:#04060F;border:1px solid rgba(255,255,255,0.1)"></div><div><div class="dt-name">Night</div><div class="dt-hex">#04060F</div><div class="dt-use">Primary background — depth without oppression</div></div></div>
+          <div class="design-token"><div class="dt-swatch" style="background:#8B5CF6"></div><div><div class="dt-name">Amara Violet</div><div class="dt-hex">#8B5CF6</div><div class="dt-use">Primary brand accent — innovation, intelligence</div></div></div>
+          <div class="design-token"><div class="dt-swatch" style="background:#00B4FF"></div><div><div class="dt-name">Grid Blue</div><div class="dt-hex">#00B4FF</div><div class="dt-use">Technical/data — precision, trust, information</div></div></div>
+          <div class="design-token"><div class="dt-swatch" style="background:#00E5A0"></div><div><div class="dt-name">Power Green</div><div class="dt-hex">#00E5A0</div><div class="dt-use">Active, live, success — power on, payment success, growth</div></div></div>
+          <div class="design-token"><div class="dt-swatch" style="background:#F59E0B"></div><div><div class="dt-name">Amber Gold</div><div class="dt-hex">#F59E0B</div><div class="dt-use">Warning, caution, financial figures, attention required</div></div></div>
+          <div class="design-token"><div class="dt-swatch" style="background:#EF4444"></div><div><div class="dt-name">Fault Red</div><div class="dt-hex">#EF4444</div><div class="dt-use">Danger, fault detected, outage, overload, unpaid</div></div></div>
+        </div>
+
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:14px">TYPOGRAPHY</h3>
+        <div class="card" style="margin-bottom:0">
+          <div class="cshine"></div>
+          <div style="margin-bottom:16px">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;color:var(--tp);line-height:1">BEBAS NEUE</div>
+            <div style="font-size:11px;color:var(--tm);font-family:'JetBrains Mono',monospace;margin-top:4px">Display / Headers — Authority, scale, engineering precision</div>
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="font-family:'DM Sans',sans-serif;font-size:18px;color:var(--ts)">DM Sans — Body & Interface Text</div>
+            <div style="font-size:11px;color:var(--tm);font-family:'JetBrains Mono',monospace;margin-top:2px">Body / UI — Clean, modern, highly readable at all sizes</div>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--green)">JetBrains Mono — Data & Code</div>
+            <div style="font-size:11px;color:var(--tm);font-family:'JetBrains Mono',monospace;margin-top:2px">Numbers, values, status codes, serial IDs, kWh readings</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:16px">MOTION PRINCIPLES</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+          <div class="card"><div class="cshine"></div>
+            <div style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:5px">Purposeful — Every motion means something</div>
+            <div style="font-size:12px;color:var(--ts);line-height:1.6">No decorative animation. Every transition communicates state change. A card sliding in means data has loaded. A colour shifting from amber to green means a fault has been resolved. Motion is a language, not decoration.</div>
+          </div>
+          <div class="card"><div class="cshine"></div>
+            <div style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:5px">Responsive — Interaction acknowledged within 16ms</div>
+            <div style="font-size:12px;color:var(--ts);line-height:1.6">Every tap, click, or swipe receives immediate visual feedback. Micro-animations (scale, glow, border colour) confirm selection before the data action completes. The system feels instantaneous even when it is not.</div>
+          </div>
+          <div class="card"><div class="cshine"></div>
+            <div style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:5px">Elegant — Cubic-bezier easing, not linear</div>
+            <div style="font-size:12px;color:var(--ts);line-height:1.6">All transitions use ease-out or custom cubic-bezier curves. Nothing starts or stops abruptly. Scroll behaviour is smooth. Page transitions use fade+translate — 300ms maximum. The interface feels like a living thing, not a static document.</div>
+          </div>
+          <div class="card"><div class="cshine"></div>
+            <div style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:5px">Restrained — Not every component animates</div>
+            <div style="font-size:12px;color:var(--ts);line-height:1.6">Data rows, table cells, and status labels update without animation — only the values change. Animation is reserved for navigation, modals, alerts, and critical state changes. This keeps the interface feeling professional rather than theatrical.</div>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:14px">COMPONENT LIBRARY</h3>
+        <div class="g2" style="gap:10px">
+          <div class="co co-v" style="margin:0;padding:12px 14px"><div class="colbl">Glass Cards</div><div class="cotxt" style="font-size:12px">backdrop-filter:blur(16px) with rgba card backgrounds. Used for overlays, modals, notification panels.</div></div>
+          <div class="co co-b" style="margin:0;padding:12px 14px"><div class="colbl">Data Chips</div><div class="cotxt" style="font-size:12px">Mono font, 9–11px, pill-shaped containers for status values, serial IDs, unit readings.</div></div>
+          <div class="co co-gr" style="margin:0;padding:12px 14px"><div class="colbl">Toggle Switches</div><div class="cotxt" style="font-size:12px">Large, thumb-friendly on mobile. Amber (caution state) → Green (active). Animated thumb slide.</div></div>
+          <div class="co co-g" style="margin:0;padding:12px 14px"><div class="colbl">Alert Banners</div><div class="cotxt" style="font-size:12px">Full-width, colour-coded by severity. Red = fault, Amber = warning, Blue = information.</div></div>
+          <div class="co co-v" style="margin:0;padding:12px 14px"><div class="colbl">Sparkline Charts</div><div class="cotxt" style="font-size:12px">Inline mini-charts (SVG) showing 24hr trends in consumption cards. No axes — just shape.</div></div>
+          <div class="co co-b" style="margin:0;padding:12px 14px"><div class="colbl">Modal Drawers</div><div class="cotxt" style="font-size:12px">Bottom-sheet on mobile, side-panel on desktop. Slides in over content. Backdrop darkens.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT PLATFORM -->
+<section id="connect">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">02</span><div class="sline"></div><span class="stag">Consumer Interface</span></div>
+    <h2 class="stitle fi">AMARA <span class="green">CONNECT</span></h2>
+    <p class="ssub fi">AMARA Connect is the face of the system for 50 million Nigerians. It must feel like a product they trust with their money, their family's comfort, and their daily decisions — while delivering real-time intelligence from one of the world's most advanced smart grid systems. Designed mobile-first. Responsive to desktop. Dark mode default, light mode available. Nigerian-first in payment, language, and cultural context.</p>
+
+    <div class="g2 fi" style="align-items:start;margin-bottom:28px">
+      <div>
+        <div class="cw" style="margin-bottom:16px">
+          <div class="ct">AMARA Connect — User Type Distribution</div>
+          <div class="cs">Projected at full 50M user scale</div>
+          <div class="ch"><canvas id="cUsers"></canvas></div>
+        </div>
+        <div class="cw">
+          <div class="ct">Notification Type Distribution (% of push volume)</div>
+          <div class="cs">Keeping users informed without overwhelming them</div>
+          <div class="ch"><canvas id="cNotif"></canvas></div>
+        </div>
+      </div>
+      <div>
+        <!-- SCREEN MOCKUP — CONNECT MOBILE -->
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--tm);margin-bottom:10px;text-transform:uppercase">Connect — Mobile Dashboard Preview</div>
+        <div class="screen-mock">
+          <div class="screen-bar">
+            <div class="sb-dot" style="background:#EF4444"></div>
+            <div class="sb-dot" style="background:#F59E0B"></div>
+            <div class="sb-dot" style="background:#10B981"></div>
+            <div class="sb-url"><span>amara.ng/dashboard</span></div>
+          </div>
+          <div class="screen-content">
+            <div class="mock-nav">
+              <div class="mock-logo" style="color:var(--violet)">AMARA</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>
+                <span style="font-family:var(--fm);font-size:9px;color:var(--green)">BAND A — LIVE</span>
+              </div>
+              <div style="font-size:20px">👤</div>
+            </div>
+            <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:14px;margin-bottom:10px">
+              <div style="font-family:var(--fm);font-size:9px;color:var(--tm);letter-spacing:1px;margin-bottom:4px">CURRENT CONSUMPTION</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--green);letter-spacing:2px;line-height:1">2.4 <span style="font-size:18px">kWh</span></div>
+              <div style="font-size:10px;color:var(--tm);margin-top:4px">Today · ₦1,440 used of ₦8,500 balance</div>
+              <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:11px;color:var(--ts)">Supply: <span style="color:var(--green)">ON</span></div>
+                <div style="width:44px;height:24px;border-radius:12px;background:var(--green);
+                  display:flex;align-items:center;justify-content:flex-end;padding:2px 4px;cursor:pointer">
+                  <div style="width:18px;height:18px;border-radius:50%;background:#fff"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mock-stat-row">
+              <div class="mock-stat"><div class="mock-stat-lbl">UNITS LEFT</div><div class="mock-stat-val" style="color:var(--green)">48.2</div><div style="font-size:9px;color:var(--tm)">kWh</div></div>
+              <div class="mock-stat"><div class="mock-stat-lbl">PEAK HOUR</div><div class="mock-stat-val" style="color:var(--gold)">18:00</div><div style="font-size:9px;color:var(--tm)">avoid</div></div>
+              <div class="mock-stat"><div class="mock-stat-lbl">GRID LOAD</div><div class="mock-stat-val" style="color:var(--blue)">74%</div><div style="font-size:9px;color:var(--tm)">zone</div></div>
+            </div>
+            <div class="mock-chart-bar" style="margin-bottom:10px">
+              <div class="mock-bar" style="height:30%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:45%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:60%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:85%;background:var(--violet)"></div>
+              <div class="mock-bar" style="height:100%;background:var(--gold)"></div>
+              <div class="mock-bar" style="height:90%;background:var(--gold)"></div>
+              <div class="mock-bar" style="height:70%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:40%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:50%;background:var(--blue)"></div>
+              <div class="mock-bar" style="height:30%;background:var(--blue)"></div>
+            </div>
+            <div style="font-family:var(--fm);font-size:9px;color:var(--tm);margin-bottom:6px;letter-spacing:1px">QUICK ACTIONS</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div style="background:var(--violet-s);border:1px solid var(--bv);border-radius:7px;padding:9px;text-align:center;cursor:pointer">
+                <div style="font-size:16px;margin-bottom:3px">💳</div>
+                <div style="font-size:10px;color:var(--violet);font-family:var(--fm)">BUY UNITS</div>
+              </div>
+              <div style="background:rgba(0,229,160,0.07);border:1px solid rgba(0,229,160,0.2);border-radius:7px;padding:9px;text-align:center;cursor:pointer">
+                <div style="font-size:16px;margin-bottom:3px">⏱️</div>
+                <div style="font-size:10px;color:var(--green);font-family:var(--fm)">SET TIMER</div>
+              </div>
+              <div style="background:var(--blue-s);border:1px solid var(--bb);border-radius:7px;padding:9px;text-align:center;cursor:pointer">
+                <div style="font-size:16px;margin-bottom:3px">🗺️</div>
+                <div style="font-size:10px;color:var(--blue);font-family:var(--fm)">GRID STATUS</div>
+              </div>
+              <div style="background:var(--gold-s);border:1px solid rgba(245,158,11,0.2);border-radius:7px;padding:9px;text-align:center;cursor:pointer">
+                <div style="font-size:16px;margin-bottom:3px">⚡</div>
+                <div style="font-size:10px;color:var(--gold);font-family:var(--fm)">CIRCUITS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECT FEATURES -->
+    <h3 class="fi" style="font-family:var(--fd);font-size:28px;letter-spacing:2px;color:var(--tp);margin-bottom:20px">CONNECT — FULL FEATURE SPECIFICATION</h3>
+    <div class="feat-grid fi">
+      <div class="feat"><div class="feat-icon" style="background:var(--green-s)">🔌</div><div><div class="feat-title">Remote Power Control</div><div class="feat-desc">Toggle power supply on or off from anywhere in Nigeria. Single tap. Real-time NEXUS confirmation within 2 seconds. Locked during fault conditions with explanation shown.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">📊</div><div><div class="feat-title">Real-Time Consumption</div><div class="feat-desc">Live kWh readings updated every 15 minutes from the AMARA Smart Terminal. Running cost in Naira displayed. 24-hour, 7-day, and 30-day consumption graphs.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">💳</div><div><div class="feat-title">Nigerian Payment Integration</div><div class="feat-desc">Paystack, Flutterwave, USSD (*xxx#), bank transfer (NUBAN), direct debit mandate. Instant unit credit on payment confirmation. Digital receipt auto-generated.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">⏱️</div><div><div class="feat-title">Power Scheduler & Timers</div><div class="feat-desc">Set supply to turn off after a specific unit count, time duration, or clock time. Schedule for daily recurring patterns. Sensitive hour warnings shown for peak grid load periods.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--green-s)">👨‍👩‍👧‍👦</div><div><div class="feat-title">Family Account System</div><div class="feat-desc">One meter, multiple registered users. One designated primary operator controls supply. Others can view, pay, and receive notifications. In-app messaging between registered account members.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">🏠</div><div><div class="feat-title">Smart Circuit Monitoring</div><div class="feat-desc">Integration with AMARA Smart Circuit Box. See which areas of the home use the most current. Individual socket/appliance-level monitoring. Fault alerts within the home network.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">🗺️</div><div><div class="feat-title">Grid Status & Fault Transparency</div><div class="feat-desc">Live map showing grid status in the user's zone. Fault location displayed when outage occurs. Estimated restoration time provided by NEXUS. No more silence from the power company.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">💰</div><div><div class="feat-title">AMARA Wallet & Savings</div><div class="feat-desc">Pre-fund a wallet balance on the platform. Set automatic payment dates. Transfer balance back to bank account anytime. Savings target for monthly power budget. Interest-free.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--green-s)">🔒</div><div><div class="feat-title">Emergency Operator Recovery</div><div class="feat-desc">If primary operator loses phone access, a PIN-secured recovery process via NIN verification transfers control to a pre-designated backup family member. No single point of human failure.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">🏢</div><div><div class="feat-title">Enterprise / Commercial Band</div><div class="feat-desc">Businesses registered as companies access a dedicated commercial interface with higher-tier pricing, dedicated account manager, load profile reports, and priority fault response SLAs.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">🌡️</div><div><div class="feat-title">Environmental Dashboard</div><div class="feat-desc">Real-time display of how the user's consumption compares to a solar-powered baseline. Carbon offset from AMARA's clean generation shown. Environmental impact personalised to each account.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">🔔</div><div><div class="feat-title">Intelligent Notifications</div><div class="feat-desc">NEXUS-driven push notifications for: low balance, upcoming payment, fault in zone, scheduled maintenance, peak hours, safety tips. Frequency controlled by user. Never spam — always relevant.</div></div></div>
+    </div>
+
+    <!-- PAYMENT STACK -->
+    <h3 class="fi" style="font-family:var(--fd);font-size:28px;letter-spacing:2px;color:var(--tp);margin:36px 0 16px">NIGERIAN PAYMENT STACK</h3>
+    <div class="cw fi" style="margin-bottom:24px">
+      <div class="ct">Projected Transaction Volume Distribution by Payment Method</div>
+      <div class="cs">Based on Nigerian fintech adoption data — Paystack/Flutterwave CBN reports 2023-2024</div>
+      <div class="ch"><canvas id="cPayments"></canvas></div>
+    </div>
+    <div class="g3 fi">
+      <div class="pay-method"><div class="pm-icon">🟢</div><div><div class="pm-name">Paystack</div><div class="pm-desc">Primary gateway. Debit card, bank transfer, USSD. Deepest Nigerian bank coverage. Instant settlement to AMARA account. Auto-retry on failed transactions.</div><span class="pm-tag">PRIMARY — 34% volume</span></div></div>
+      <div class="pay-method"><div class="pm-icon">🌍</div><div><div class="pm-name">Flutterwave</div><div class="pm-desc">Secondary gateway and diaspora payments. Enables Nigerians abroad to fund family accounts from USD, GBP, or EUR. Auto-conversion to Naira at market rate.</div><span class="pm-tag">SECONDARY — 14% volume</span></div></div>
+      <div class="pay-method"><div class="pm-icon">📱</div><div><div class="pm-name">USSD (*xxx#)</div><div class="pm-desc">Feature phone users and areas with poor data coverage pay via USSD shortcode. No internet required. Instantly credited via NEXUS SMS confirmation. Critical for rural inclusion.</div><span class="pm-tag">INCLUSION CHANNEL — 18%</span></div></div>
+      <div class="pay-method"><div class="pm-icon">🏦</div><div><div class="pm-name">Bank Transfer (NUBAN)</div><div class="pm-desc">Each customer account generates a unique virtual NUBAN account number. Transfers from any Nigerian bank credit automatically within 2 minutes via NIP settlement.</div><span class="pm-tag">ENTERPRISE PREFERRED</span></div></div>
+      <div class="pay-method"><div class="pm-icon">💼</div><div><div class="pm-name">AMARA Wallet</div><div class="pm-desc">Pre-funded balance stored on the platform. Earns no interest but enables budgeting, recurring auto-debit, and instant payment without third-party gateway latency.</div><span class="pm-tag">BUILT-IN — 8% volume</span></div></div>
+      <div class="pay-method"><div class="pm-icon">🔄</div><div><div class="pm-name">Direct Debit Mandate</div><div class="pm-desc">One-time CBN mandate setup allows AMARA to debit customer account on a chosen date each month. Zero action required from user. Ideal for commercial accounts and steady earners.</div><span class="pm-tag">AUTO-PAYMENT</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPS PLATFORM -->
+<section id="ops" style="background:var(--bg2)">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">03</span><div class="sline"></div><span class="stag">Staff Interface</span></div>
+    <h2 class="stitle fi">AMARA <span class="blue">OPS</span></h2>
+    <p class="ssub fi">AMARA Ops is the operational nerve centre for the 25,000+ staff who support the grid, the customers, and the company. It is desktop-only — designed for focused, professional use across wide screens. NEXUS AI is the primary operator. Human staff are the exception handler. The interface is structured around that reality: AI surfaces everything, humans decide on the edge cases.</p>
+
+    <div class="g2 fi" style="align-items:start;margin-bottom:28px">
+      <div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--blue);margin-bottom:16px">TICKET SYSTEM — AI TRIAGED</h3>
+        <p style="font-size:13px;color:var(--ts);line-height:1.75;margin-bottom:14px">Every customer complaint, fault alert, and grid anomaly generates a ticket. NEXUS analyses each ticket on arrival — classifying severity, suggesting root cause, and recommending resolution steps. Staff see tickets pre-sorted, pre-diagnosed, and pre-recommended. Human effort is applied only where AI certainty falls below 90%.</p>
+        <div class="card" style="margin-bottom:14px">
+          <div class="cshine"></div>
+          <h4 style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:12px">TICKET WORKFLOW</h4>
+          <div class="dr"><span class="drl">Customer reports via Connect / USSD</span><span class="drv b">Auto-ticket created</span></div>
+          <div class="dr"><span class="drl">NEXUS classifies severity (P1–P4)</span><span class="drv b">&lt; 500ms</span></div>
+          <div class="dr"><span class="drl">AI diagnosis + resolution suggestion</span><span class="drv b">&lt; 2 seconds</span></div>
+          <div class="dr"><span class="drl">Auto-resolve rate (NEXUS only)</span><span class="drv gr">68% of P3/P4 tickets</span></div>
+          <div class="dr"><span class="drl">Human review threshold</span><span class="drv g">AI confidence &lt; 90%</span></div>
+          <div class="dr"><span class="drl">Field dispatch trigger</span><span class="drv g">P1/P2 + physical fault confirmed</span></div>
+          <div class="dr"><span class="drl">Average P1 resolution target</span><span class="drv gr">&lt; 4 hours</span></div>
+          <div class="dr"><span class="drl">SLA breach auto-escalation</span><span class="drv b">NEXUS → manager alert</span></div>
+        </div>
+        <div class="card">
+          <div class="cshine"></div>
+          <h4 style="font-size:13px;font-weight:600;color:var(--tp);margin-bottom:12px">OPS STAFF ROLE BREAKDOWN</h4>
+          <div class="dr"><span class="drl">Grid Control Room Operators</span><span class="drv b">24/7 shift × 4 centres</span></div>
+          <div class="dr"><span class="drl">Customer Experience Agents</span><span class="drv b">AI-augmented, 500+ agents</span></div>
+          <div class="dr"><span class="drl">Field Technical Teams</span><span class="drv b">5,000+ nationwide</span></div>
+          <div class="dr"><span class="drl">Smart Terminal Technicians</span><span class="drv b">3,000+ (rollout phase)</span></div>
+          <div class="dr"><span class="drl">NEXUS Oversight Engineers</span><span class="drv b">50+ (AI watchdog role)</span></div>
+          <div class="dr"><span class="drl">Billing & Compliance Officers</span><span class="drv b">200+ auditors</span></div>
+        </div>
+      </div>
+      <div>
+        <!-- OPS SCREEN MOCKUP -->
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--tm);margin-bottom:10px;text-transform:uppercase">Ops — Desktop Dashboard Preview</div>
+        <div class="screen-mock">
+          <div class="screen-bar">
+            <div class="sb-dot" style="background:#EF4444"></div>
+            <div class="sb-dot" style="background:#F59E0B"></div>
+            <div class="sb-dot" style="background:#10B981"></div>
+            <div class="sb-url"><span>ops.amara.ng/dashboard</span></div>
+          </div>
+          <div class="screen-content">
+            <div style="display:flex;gap:8px;margin-bottom:10px">
+              <div style="flex:1;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px">
+                <div style="font-family:var(--fm);font-size:8px;color:var(--danger);letter-spacing:1px;margin-bottom:3px">P1 TICKETS</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--danger)">3</div>
+              </div>
+              <div style="flex:1;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:10px">
+                <div style="font-family:var(--fm);font-size:8px;color:var(--gold);letter-spacing:1px;margin-bottom:3px">P2 TICKETS</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold)">17</div>
+              </div>
+              <div style="flex:1;background:var(--blue-s);border:1px solid rgba(0,180,255,0.2);border-radius:8px;padding:10px">
+                <div style="font-family:var(--fm);font-size:8px;color:var(--blue);letter-spacing:1px;margin-bottom:3px">LIVE GRID MW</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--blue)">9,847</div>
+              </div>
+              <div style="flex:1;background:var(--green-s);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:10px">
+                <div style="font-family:var(--fm);font-size:8px;color:var(--green);letter-spacing:1px;margin-bottom:3px">ACTIVE USERS</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)">2.1M</div>
+              </div>
+            </div>
+            <div style="font-family:var(--fm);font-size:8px;color:var(--tm);letter-spacing:1px;margin-bottom:6px">NEXUS ALERT QUEUE</div>
+            <div class="mock-row"><span class="mock-lbl">Transformer fault — Agege zone, Lagos</span><span class="mock-val" style="color:var(--danger)">P1 · 12min</span></div>
+            <div class="mock-row"><span class="mock-lbl">Bypass detected — Meter ID AT-25-003-044821</span><span class="mock-val" style="color:var(--gold)">P2 · 4min</span></div>
+            <div class="mock-row"><span class="mock-lbl">Gas supply pressure drop — Egbin plant</span><span class="mock-val" style="color:var(--gold)">P2 · 8min</span></div>
+            <div class="mock-row"><span class="mock-lbl">Overload warning — Abuja CBD node</span><span class="mock-val" style="color:var(--blue)">P3 · 2min</span></div>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(139,92,246,0.06);border-radius:6px;border:1px solid var(--bv)">
+              <div style="font-family:var(--fm);font-size:8px;color:var(--violet);letter-spacing:1px;margin-bottom:3px">NEXUS RECOMMENDATION — P1 AGEGE</div>
+              <div style="font-size:10px;color:var(--ts)">Reroute load to Ikeja West substation. Dispatch Team Lagos-07. ETA 18min. Affected: 4,200 accounts.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="fi" style="font-family:var(--fd);font-size:28px;letter-spacing:2px;color:var(--tp);margin-bottom:18px">OPS — FULL FEATURE SPECIFICATION</h3>
+    <div class="feat-grid fi">
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">🎫</div><div><div class="feat-title">AI-Triaged Ticket Queue</div><div class="feat-desc">Every ticket arrives pre-classified (P1–P4), pre-diagnosed by NEXUS, with resolution suggestions ranked by confidence score. Staff handle exceptions, not routine cases.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">🗺️</div><div><div class="feat-title">Live Grid Map View</div><div class="feat-desc">Real-time visual of the national grid — node load, active faults, field team positions, and rerouting decisions by NEXUS. Colour-coded by zone health status.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--green-s)">🚗</div><div><div class="feat-title">Field Team Dispatch</div><div class="feat-desc">NEXUS recommends nearest qualified team. Operator confirms dispatch in one click. Field team receives job brief on their mobile device. Real-time location tracked to resolution.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">👤</div><div><div class="feat-title">Customer Account Access</div><div class="feat-desc">Full customer profile including consumption history, payment history, terminal status, and active tickets. Sensitive data access is logged and role-permission gated.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">🤖</div><div><div class="feat-title">AI Customer Support Co-pilot</div><div class="feat-desc">NEXUS handles Level 1 customer queries autonomously (balance, payment, outage status). Agents receive handoffs only when customer escalates or NEXUS confidence drops below threshold.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">📈</div><div><div class="feat-title">Performance KPI Dashboard</div><div class="feat-desc">Individual and team-level metrics: tickets resolved, average handle time, customer satisfaction score, field jobs completed. Performance data feeds into monthly staff review.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMAND PLATFORM -->
+<section id="command">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">04</span><div class="sline"></div><span class="stag">Management Interface</span></div>
+    <h2 class="stitle fi">AMARA <span class="gold">COMMAND</span></h2>
+    <p class="ssub fi">AMARA Command is the executive intelligence layer. Situated in a physically secured national command centre where the major grid transmission lines converge, it gives senior management real-time visibility over the entire system — generation, distribution, financial performance, staff productivity, environmental metrics, and export operations — from a single, architecturally exceptional interface.</p>
+
+    <div class="g2 fi" style="align-items:start;margin-bottom:28px">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="cshine"></div>
+          <h4 style="font-family:var(--fd);font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:14px">COMMAND — CORE DASHBOARDS</h4>
+          <div class="dr"><span class="drl">National Grid Overview</span><span class="drv g">Real-time MW generation + load</span></div>
+          <div class="dr"><span class="drl">Financial Performance</span><span class="drv g">Daily/monthly revenue vs target</span></div>
+          <div class="dr"><span class="drl">Phase Progress Tracker</span><span class="drv b">% complete vs timeline</span></div>
+          <div class="dr"><span class="drl">Staff Performance Index</span><span class="drv b">Aggregated KPIs by region</span></div>
+          <div class="dr"><span class="drl">Export Status Board</span><span class="drv g">MW exported, revenue, SLAs</span></div>
+          <div class="dr"><span class="drl">Environmental Dashboard</span><span class="drv gr">CO₂ offset, carbon credits</span></div>
+          <div class="dr"><span class="drl">Smart Terminal Coverage</span><span class="drv v">% national penetration</span></div>
+          <div class="dr"><span class="drl">NEXUS Health Monitor</span><span class="drv gr">AI system uptime + accuracy</span></div>
+          <div class="dr"><span class="drl">Grid Capacity Projections</span><span class="drv v">5/10/20yr demand forecast</span></div>
+          <div class="dr"><span class="drl">Investor Reporting Module</span><span class="drv g">Auto-generated PDF reports</span></div>
+        </div>
+        <div class="co co-g">
+          <div class="colbl">Physical Command Centre</div>
+          <div class="cotxt">The AMARA Command Centre is not a standard office. It is a purpose-built national operations facility — architecturally designed to communicate the gravity and sophistication of the system it governs. Modelled on the world's most advanced grid control rooms (National Grid UK, EirGrid, ENTSO-E), it features large-format wall displays (16×9 tiled LED, minimum 6m wide), biometric entry, Faraday-shielded server rooms, and a tiered floor plan that places NEXUS monitoring at the centre and executive oversight above. <strong>The building itself is a statement.</strong></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--tm);margin-bottom:10px;text-transform:uppercase">Command — Executive Dashboard Preview</div>
+        <div class="screen-mock">
+          <div class="screen-bar">
+            <div class="sb-dot" style="background:#EF4444"></div>
+            <div class="sb-dot" style="background:#F59E0B"></div>
+            <div class="sb-dot" style="background:#10B981"></div>
+            <div class="sb-url"><span>command.amara.ng · CLASSIFIED</span></div>
+          </div>
+          <div class="screen-content">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--gold)">AMARA COMMAND</div>
+              <div style="font-family:var(--fm);font-size:9px;color:var(--green)">GRID: NOMINAL · ALL SYSTEMS OPERATIONAL</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">
+              <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);border-radius:7px;padding:10px;text-align:center">
+                <div style="font-family:var(--fm);font-size:7px;color:var(--green);letter-spacing:1px;margin-bottom:3px">LIVE GEN</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green)">9,847MW</div>
+              </div>
+              <div style="background:var(--gold-s);border:1px solid rgba(245,158,11,0.2);border-radius:7px;padding:10px;text-align:center">
+                <div style="font-family:var(--fm);font-size:7px;color:var(--gold);letter-spacing:1px;margin-bottom:3px">TODAY REV</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">₦18.4B</div>
+              </div>
+              <div style="background:var(--blue-s);border:1px solid rgba(0,180,255,0.2);border-radius:7px;padding:10px;text-align:center">
+                <div style="font-family:var(--fm);font-size:7px;color:var(--blue);letter-spacing:1px;margin-bottom:3px">EXPORT MW</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--blue)">1,240</div>
+              </div>
+              <div style="background:var(--violet-s);border:1px solid var(--bv);border-radius:7px;padding:10px;text-align:center">
+                <div style="font-family:var(--fm);font-size:7px;color:var(--violet);letter-spacing:1px;margin-bottom:3px">UPTIME</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--violet)">99.97%</div>
+              </div>
+            </div>
+            <div style="font-family:var(--fm);font-size:8px;color:var(--tm);letter-spacing:1px;margin-bottom:6px">ZONE PERFORMANCE TODAY</div>
+            <div class="mock-row"><span class="mock-lbl">South-West (Lagos)</span><span class="mock-val" style="color:var(--green)">3,240 MW · 98.2% SLA</span></div>
+            <div class="mock-row"><span class="mock-lbl">North-Central (Abuja)</span><span class="mock-val" style="color:var(--green)">2,110 MW · 99.1% SLA</span></div>
+            <div class="mock-row"><span class="mock-lbl">South-South (Port Harcourt)</span><span class="mock-val" style="color:var(--green)">1,890 MW · 97.8% SLA</span></div>
+            <div class="mock-row"><span class="mock-lbl">North-West (Kano)</span><span class="mock-val" style="color:var(--gold)">1,440 MW · 94.2% SLA ⚠</span></div>
+            <div style="margin-top:8px;padding:8px 10px;background:var(--gold-s);border-radius:6px;border:1px solid rgba(245,158,11,0.2)">
+              <div style="font-family:var(--fm);font-size:8px;color:var(--gold);letter-spacing:1px;margin-bottom:2px">NEXUS STRATEGIC NOTE</div>
+              <div style="font-size:10px;color:var(--ts)">Kano zone: gas supply pressure 12% below optimal. Recommend activating Sokoto solar reserve (800MW available). Action required by 16:00.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="fi" style="font-family:var(--fd);font-size:28px;letter-spacing:2px;color:var(--tp);margin-bottom:18px">COMMAND — FULL FEATURE SPECIFICATION</h3>
+    <div class="feat-grid fi">
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">🌐</div><div><div class="feat-title">National Grid Map</div><div class="feat-desc">Full-screen, real-time visualisation of Nigeria's grid. Every node, transmission line, generation source, and export line displayed with live MW and SLA status.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">💹</div><div><div class="feat-title">Financial Intelligence</div><div class="feat-desc">Daily, monthly, and annual revenue vs targets. Band-by-band collection rates. Export revenue breakdown. CapEx spend vs budget. Phase ROI tracking updated live.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--blue-s)">📋</div><div><div class="feat-title">Staff Performance</div><div class="feat-desc">Aggregated KPIs for every department and region. Individual team leaders can be reviewed. Underperforming zones flagged by NEXUS with suggested intervention. HR-linked reporting.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--green-s)">🌱</div><div><div class="feat-title">Environmental Reporting</div><div class="feat-desc">Live CO₂ offset data. Carbon credit accrual rate. Agrivoltaic programme metrics. Investor-ready ESG summary auto-generated monthly. Nigeria NDC contribution tracker.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--gold-s)">🔮</div><div><div class="feat-title">NEXUS Strategic Forecasts</div><div class="feat-desc">5, 10, and 20-year demand projections. Capacity upgrade triggers (when grid reaches 85% sustained utilisation, NEXUS flags expansion recommendation). Phase readiness assessments.</div></div></div>
+      <div class="feat"><div class="feat-icon" style="background:var(--violet-s)">📄</div><div><div class="feat-title">Investor Reporting Suite</div><div class="feat-desc">Automated generation of investor-grade quarterly reports in PDF format — revenue, uptime, social impact, phase milestones, and environmental performance. Board-ready with one click.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM SCALE -->
+<section id="scale" style="background:var(--bg2)">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">05</span><div class="sline"></div><span class="stag">Scale & Growth</span></div>
+    <h2 class="stitle fi">PLATFORM <span class="violet">SCALE</span> PROJECTIONS</h2>
+    <p class="ssub fi">Three platforms, one architecture. The NEXUS API layer services all three simultaneously — every data point, every real-time event, every payment — without prioritising one interface over another. The system is designed to handle 50M concurrent consumer sessions without degradation.</p>
+    <div class="cw fi">
+      <div class="ct">User Growth Across All Three Platforms (10-Year Projection)</div>
+      <div class="cs">Connect (consumers), Ops (staff), Command (management) — all scaling with grid deployment phases</div>
+      <div style="height:280px"><canvas id="cPlatformScale"></canvas></div>
+      <div class="csrc">* Connect at 50M users by Year 10 mirrors full Smart Terminal deployment. Ops and Command scale with grid phase hiring.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHENTICATION -->
+<section id="auth">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">06</span><div class="sline"></div><span class="stag">Security & Authentication</span></div>
+    <h2 class="stitle fi">AUTH <span class="violet">DESIGN</span></h2>
+    <p class="ssub fi">Authentication is the first and most critical fraud prevention layer. Each platform uses a different authentication model matched to its user type, risk profile, and device context. The design specifically addresses Nigeria's known fraud vectors: SIM-swap attacks, social engineering, and identity theft.</p>
+
+    <div class="g3 fi" style="margin-bottom:28px">
+      <div class="card" style="border-color:rgba(0,229,160,0.2)">
+        <div class="cshine"></div>
+        <h4 style="font-family:var(--fd);font-size:18px;letter-spacing:2px;color:var(--green);margin-bottom:14px">CONNECT — CONSUMER</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--green-s);border-color:rgba(0,229,160,0.3)">📱</div>
+            <div><div class="auth-label">Phone Number</div><div class="auth-desc">Nigerian number. 11-digit NCC format. Used as primary identity — not username.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--green-s);border-color:rgba(0,229,160,0.3)">🔢</div>
+            <div><div class="auth-label">OTP Verification</div><div class="auth-desc">6-digit OTP via SMS. 120-second expiry. Max 3 attempts. Anti-SIM-swap: OTP delivery blocked if SIM changed within 48 hours.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--green-s);border-color:rgba(0,229,160,0.3)">🪪</div>
+            <div><div class="auth-label">NIN Linking</div><div class="auth-desc">National Identity Number linked at account creation. Not used for daily login but required for recovery and family account management.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--green-s);border-color:rgba(0,229,160,0.3)">👆</div>
+            <div><div class="auth-label">Biometric (subsequent logins)</div><div class="auth-desc">Face ID / fingerprint on supported devices. PIN fallback. Daily reauth with biometric — no persistent sessions that can be hijacked.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="border-color:rgba(0,180,255,0.2)">
+        <div class="cshine"></div>
+        <h4 style="font-family:var(--fd);font-size:18px;letter-spacing:2px;color:var(--blue);margin-bottom:14px">OPS — STAFF</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--blue-s);border-color:rgba(0,180,255,0.3)">🆔</div>
+            <div><div class="auth-label">Staff ID + Password</div><div class="auth-desc">Unique AMARA-issued Staff ID (AO-[REGION]-[ROLE]-[SERIAL]). Password min 14 chars. Enforced rotation every 90 days.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--blue-s);border-color:rgba(0,180,255,0.3)">🔑</div>
+            <div><div class="auth-label">Hardware 2FA Token</div><div class="auth-desc">TOTP via Yubikey or Google Authenticator. Every login requires hardware token. No SMS-based 2FA for staff — SIM-swap risk is too high.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--blue-s);border-color:rgba(0,180,255,0.3)">🖥️</div>
+            <div><div class="auth-label">Device Registration</div><div class="auth-desc">Staff can only log in from pre-registered AMARA-issued devices. New device login requires IT department approval and re-verification.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--blue-s);border-color:rgba(0,180,255,0.3)">📋</div>
+            <div><div class="auth-label">Role-Based Access Control</div><div class="auth-desc">Every action is permission-gated. Customer service agents cannot access billing override. Only compliance officers see full payment history. NEXUS logs all access events.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="border-color:rgba(245,158,11,0.2)">
+        <div class="cshine"></div>
+        <h4 style="font-family:var(--fd);font-size:18px;letter-spacing:2px;color:var(--gold);margin-bottom:14px">COMMAND — MANAGEMENT</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--gold-s);border-color:rgba(245,158,11,0.3)">👁️</div>
+            <div><div class="auth-label">Biometric + Password</div><div class="auth-desc">Face recognition + iris scan at Command Centre terminals. Password as secondary. No remote login permitted for top-tier management accounts.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--gold-s);border-color:rgba(245,158,11,0.3)">📍</div>
+            <div><div class="auth-label">Location Verification</div><div class="auth-desc">Command access only from geofenced physical Command Centre locations. Any off-location login attempt triggers immediate security alert and session block.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--gold-s);border-color:rgba(245,158,11,0.3)">🤝</div>
+            <div><div class="auth-label">Dual Authorisation</div><div class="auth-desc">Any action affecting national grid configuration requires approval from two management-level accounts simultaneously. Single-person override is architecturally impossible.</div></div>
+          </div>
+          <div class="auth-step" style="width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+            <div class="auth-icon" style="background:var(--gold-s);border-color:rgba(245,158,11,0.3)">🔐</div>
+            <div><div class="auth-label">Full Session Recording</div><div class="auth-desc">Every Command session is fully recorded, timestamped, and encrypted to immutable storage. No action taken at Command level is unaccountable.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATABASE -->
+<section id="database" style="background:var(--bg2)">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">07</span><div class="sline"></div><span class="stag">Data Architecture</span></div>
+    <h2 class="stitle fi">DATABASE <span class="violet">ARCHITECTURE</span></h2>
+    <p class="ssub fi">50 million customer records. 500 million annual transactions. 50,000 Smart Terminals reporting every 15 minutes. The AMARA data architecture is designed to scale without degradation — using a combination of purpose-built databases for each data type, sharded for geographic distribution, and replicated across a minimum of three data centres.</p>
+
+    <div class="g2 fi" style="align-items:start">
+      <div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:16px">CUSTOMER ID FORMAT</h3>
+        <div class="card" style="margin-bottom:14px">
+          <div class="cshine"></div>
+          <p style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">Every customer account is assigned a unique AMARA Customer ID at registration. The format encodes geographic zone and account type for immediate context without database lookup.</p>
+          <div class="db-row">
+            <div class="db-icon">👤</div>
+            <div>
+              <div class="db-title">Customer ID</div>
+              <div class="db-desc">Residential and commercial accounts. State code + zone + serial.</div>
+              <div class="db-code">AM-LAG-SW-00000001</div>
+            </div>
+          </div>
+          <div class="db-row">
+            <div class="db-icon">⚡</div>
+            <div>
+              <div class="db-title">Smart Terminal Serial</div>
+              <div class="db-desc">Manufacture year + batch + unit. Cryptographically signed at factory.</div>
+              <div class="db-code">AT-25-001-00044821</div>
+            </div>
+          </div>
+          <div class="db-row">
+            <div class="db-icon">💳</div>
+            <div>
+              <div class="db-title">Transaction ID</div>
+              <div class="db-desc">Timestamp-seeded UUID on the blockchain ledger. Non-sequential to prevent enumeration.</div>
+              <div class="db-code">TX-1735042800-a3f9c2</div>
+            </div>
+          </div>
+          <div class="db-row">
+            <div class="db-icon">🎫</div>
+            <div>
+              <div class="db-title">Ticket ID</div>
+              <div class="db-desc">Priority + timestamp + zone + auto-increment. For NEXUS and Ops routing.</div>
+              <div class="db-code">TK-P1-250104-LAG-00182</div>
+            </div>
+          </div>
+          <div class="db-row" style="border-bottom:none">
+            <div class="db-icon">👥</div>
+            <div>
+              <div class="db-title">Staff ID</div>
+              <div class="db-desc">Platform (AO=Ops/AC=Command) + region + role code + serial.</div>
+              <div class="db-code">AO-LAG-CX-000421</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--tp);margin-bottom:16px">DATABASE TECHNOLOGY STACK</h3>
+        <div class="card">
+          <div class="cshine"></div>
+          <div class="stack-item"><span class="si-label">Customer Records (50M)</span><span><div class="si-tech">PostgreSQL (sharded)</div><div class="si-why">ACID compliance, proven at billion-record scale, Nigerian fintech standard</div></span></div>
+          <div class="stack-item"><span class="si-label">Real-Time Grid Data</span><span><div class="si-tech">InfluxDB + TimescaleDB</div><div class="si-why">Time-series optimised. 50K events/sec. Sub-ms query on 90-day windows</div></span></div>
+          <div class="stack-item"><span class="si-label">Session & Cache Layer</span><span><div class="si-tech">Redis Cluster</div><div class="si-why">Sub-ms user session lookup. Rate limiting. Real-time pub/sub for NEXUS events</div></span></div>
+          <div class="stack-item"><span class="si-label">Billing Ledger</span><span><div class="si-tech">Hyperledger Fabric</div><div class="si-why">Immutable, auditable. Every transaction is blockchain-recorded. Fraud-proof</div></span></div>
+          <div class="stack-item"><span class="si-label">Document Storage</span><span><div class="si-tech">MongoDB Atlas</div><div class="si-why">Flexible schema for NEXUS AI models, ticket enrichment, customer notes</div></span></div>
+          <div class="stack-item"><span class="si-label">Search & Analytics</span><span><div class="si-tech">Elasticsearch</div><div class="si-why">Full-text search across 50M accounts. Predictive search in Connect app</div></span></div>
+          <div class="stack-item"><span class="si-label">Message Queue</span><span><div class="si-tech">Apache Kafka</div><div class="si-why">Guaranteed delivery of all grid events, payment confirmations, NEXUS alerts</div></span></div>
+          <div class="stack-item" style="border-bottom:none"><span class="si-label">File & Receipt Storage</span><span><div class="si-tech">MinIO (S3-compatible)</div><div class="si-why">On-premise object storage. Receipts, reports, session recordings, EIA docs</div></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="seyebrow fi"><span class="snum">08</span><div class="sline"></div><span class="stag">Development Stack</span></div>
+    <h2 class="stitle fi">RECOMMENDED <span class="violet">TECH STACK</span></h2>
+    <p class="ssub fi">The AMARA platform stack is chosen for three properties: proven at scale, strong Nigerian developer talent pool, and long-term maintainability. No experimental frameworks. No single-vendor lock-in. Every technology choice has a clear rationale and a qualified replacement if needed.</p>
+
+    <div class="g3 fi">
+      <div class="card">
+        <div class="cshine"></div>
+        <h3 style="font-family:var(--fd);font-size:20px;letter-spacing:2px;color:var(--green);margin-bottom:14px">AMARA CONNECT</h3>
+        <div class="stack-item"><span class="si-label">Mobile App</span><span><div class="si-tech">React Native</div><div class="si-why">Single codebase iOS + Android. Large Nigerian dev pool</div></span></div>
+        <div class="stack-item"><span class="si-label">Web (Desktop)</span><span><div class="si-tech">Next.js 14</div><div class="si-why">SSR for performance, SEO, and fast load on 4G</div></span></div>
+        <div class="stack-item"><span class="si-label">State Management</span><span><div class="si-tech">Zustand + React Query</div><div class="si-why">Lightweight, real-time data sync from NEXUS WebSocket</div></span></div>
+        <div class="stack-item"><span class="si-label">Charts/Viz</span><span><div class="si-tech">Recharts + D3.js</div><div class="si-why">Consumption graphs, sparklines, grid status maps</div></span></div>
+        <div class="stack-item" style="border-bottom:none"><span class="si-label">Push Notifications</span><span><div class="si-tech">Firebase FCM</div><div class="si-why">Proven at scale. Works on both iOS and Android</div></span></div>
+      </div>
+      <div class="card">
+        <div class="cshine"></div>
+        <h3 style="font-family:var(--fd);font-size:20px;letter-spacing:2px;color:var(--blue);margin-bottom:14px">AMARA OPS + COMMAND</h3>
+        <div class="stack-item"><span class="si-label">Frontend Framework</span><span><div class="si-tech">React 18 + TypeScript</div><div class="si-why">Type-safe, component-driven. Strict TypeScript throughout</div></span></div>
+        <div class="stack-item"><span class="si-label">Grid Visualisation</span><span><div class="si-tech">D3.js + Mapbox GL</div><div class="si-why">Custom SVG grid maps, real-time node status overlays</div></span></div>
+        <div class="stack-item"><span class="si-label">Real-Time Data</span><span><div class="si-tech">Socket.io + GraphQL</div><div class="si-why">WebSocket subscriptions for live grid events from NEXUS</div></span></div>
+        <div class="stack-item"><span class="si-label">Data Tables</span><span><div class="si-tech">TanStack Table v8</div><div class="si-why">Virtualised rendering for 50M customer records</div></span></div>
+        <div class="stack-item" style="border-bottom:none"><span class="si-label">Authentication</span><span><div class="si-tech">Keycloak + TOTP</div><div class="si-why">Enterprise SSO, RBAC, hardware 2FA support built-in</div></span></div>
+      </div>
+      <div class="card">
+        <div class="cshine"></div>
+        <h3 style="font-family:var(--fd);font-size:20px;letter-spacing:2px;color:var(--violet);margin-bottom:14px">NEXUS API BACKEND</h3>
+        <div class="stack-item"><span class="si-label">API Framework</span><span><div class="si-tech">Node.js + Fastify</div><div class="si-why">100K+ req/sec. Non-blocking I/O for real-time grid events</div></span></div>
+        <div class="stack-item"><span class="si-label">API Protocol</span><span><div class="si-tech">GraphQL + REST</div><div class="si-why">GraphQL for platforms, REST for third-party integrations</div></span></div>
+        <div class="stack-item"><span class="si-label">AI/ML Engine</span><span><div class="si-tech">Python + PyTorch</div><div class="si-why">LSTM demand forecasting, GNN routing, anomaly detection</div></span></div>
+        <div class="stack-item"><span class="si-label">Infrastructure</span><span><div class="si-tech">Kubernetes + Terraform</div><div class="si-why">Container orchestration, auto-scaling, IaC deployments</div></span></div>
+        <div class="stack-item" style="border-bottom:none"><span class="si-label">CI/CD</span><span><div class="si-tech">GitHub Actions + ArgoCD</div><div class="si-why">Automated testing, security scanning, zero-downtime deploys</div></span></div>
+      </div>
+    </div>
+
+    <div class="co co-v fi" style="margin-top:28px">
+      <div class="colbl">Development Mandate</div>
+      <div class="cotxt">All AMARA platform code is written to strict TypeScript standards with 90%+ test coverage. Security audits performed by a dedicated internal red team after every major release. All third-party dependencies are reviewed quarterly. The codebase is designed to be maintainable by Nigerian engineers — documented in English, with inline comments at every non-trivial logic block. <strong>This platform must outlast any single developer, team, or technology trend.</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE TO PROTOTYPES -->
+<section id="prototypes" style="background:var(--bg2);text-align:center">
+  <div class="container" style="position:relative;z-index:1">
+    <div class="seyebrow fi" style="justify-content:center"><span class="snum">09</span><div class="sline"></div><span class="stag">What's Next</span></div>
+    <h2 class="stitle fi" style="text-align:center">THE DOSSIERS<br>ARE <span class="violet">COMPLETE</span>.<br>NOW: THE <span class="green">PROTOTYPES</span>.</h2>
+    <p class="ssub fi" style="text-align:center;margin:0 auto 48px">Three dossiers. One complete blueprint. The next files are the interactive HTML prototypes of each platform — AMARA Connect, AMARA Ops, and AMARA Command — rendered in full fidelity for presentation to investors, developers, and the implementation team.</p>
+    <div class="g3 fi" style="text-align:left">
+      <div class="card" style="border-color:rgba(0,229,160,0.25)">
+        <div style="font-size:36px;margin-bottom:14px">📱</div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--green);margin-bottom:8px">PROTOTYPE 01</h3>
+        <div style="font-family:var(--fm);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:10px">AMARA CONNECT — platform-customer.html</div>
+        <p style="font-size:13px;color:var(--ts);line-height:1.7">Fully interactive consumer prototype. Mobile + desktop responsive. Dark/light mode. Dashboard, power toggle, payment flow, consumption charts, grid status, family accounts, smart circuit panel.</p>
+      </div>
+      <div class="card" style="border-color:rgba(0,180,255,0.25)">
+        <div style="font-size:36px;margin-bottom:14px">🖥️</div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--blue);margin-bottom:8px">PROTOTYPE 02</h3>
+        <div style="font-family:var(--fm);font-size:10px;color:var(--blue);letter-spacing:2px;margin-bottom:10px">AMARA OPS — platform-staff.html</div>
+        <p style="font-size:13px;color:var(--ts);line-height:1.7">Desktop staff interface prototype. AI ticket queue, grid monitoring panel, customer search, field dispatch map, NEXUS alert feed, and performance dashboard — all in one rich interface.</p>
+      </div>
+      <div class="card" style="border-color:rgba(245,158,11,0.25)">
+        <div style="font-size:36px;margin-bottom:14px">⚡</div>
+        <h3 style="font-family:var(--fd);font-size:22px;letter-spacing:2px;color:var(--gold);margin-bottom:8px">PROTOTYPE 03</h3>
+        <div style="font-family:var(--fm);font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:10px">AMARA COMMAND — platform-management.html</div>
+        <p style="font-size:13px;color:var(--ts);line-height:1.7">Executive management prototype. National grid map, revenue dashboards, environmental metrics, staff performance, export status, strategic NEXUS forecasts, and investor reporting suite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-in">
+    <div>
+      <div class="fbrand">AMARA</div>
+      <div class="fbsub">POWER SYSTEMS NIGERIA</div>
+      <div class="fslogan">"Light Belongs Here."</div>
+    </div>
+    <div class="fcopy">
+      <div>© 2025 Buhari Mohammed. All Rights Reserved.</div>
+      <div>AMARA Power Systems Nigeria — Investment Proposal Series</div>
+      <div style="margin-top:4px;color:var(--tm);font-size:10px">Confidential. Authorised investment review only.</div>
+    </div>
+    <div class="fid">
+      <div>AMARA-D3-2025-003</div>
+      <div>Dossier III of III</div>
+      <span class="fnext">→ Next: Platform Prototypes</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+Chart.defaults.color='#64748B';
+Chart.defaults.borderColor='rgba(255,255,255,0.05)';
+Chart.defaults.font.family='JetBrains Mono';
+Chart.defaults.font.size=10;
+const TT={backgroundColor:'rgba(4,6,15,0.97)',borderColor:'rgba(139,92,246,0.2)',borderWidth:1,padding:10};
+
+try {
+
+new Chart(document.getElementById('cUsers'),{
+  type:'doughnut',
+  data:{
+    labels:['Residential (single)','Family/Shared Accounts','SME Commercial','Industrial/Enterprise','Government/Public'],
+    datasets:[{data:[62,18,12,5,3],
+      backgroundColor:['#00E5A0','#8B5CF6','#00B4FF','#F59E0B','#6B7280'],
+      borderColor:'rgba(4,6,15,0.8)',borderWidth:4,hoverOffset:8}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+    plugins:{legend:{position:'right',labels:{color:'#94A3B8',boxWidth:12,padding:14,font:{size:11}}},
+      tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.parsed+'%'}}}}
+});
+
+new Chart(document.getElementById('cPayments'),{
+  type:'bar',
+  data:{
+    labels:['Paystack','Bank Transfer','USSD','Flutterwave','AMARA Wallet','Direct Debit'],
+    datasets:[{label:'Projected Transaction Share %',
+      data:[34,22,18,14,8,4],
+      backgroundColor:(ctx)=>{
+        const colors=['rgba(0,229,160,0.75)','rgba(0,180,255,0.6)','rgba(139,92,246,0.65)',
+          'rgba(245,158,11,0.65)','rgba(0,229,160,0.4)','rgba(0,180,255,0.35)'];
+        return colors[ctx.dataIndex]||'rgba(139,92,246,0.5)';
+      },
+      borderRadius:4,borderWidth:0}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.parsed.x+'% of transactions'}}},
+    scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',callback:v=>v+'%'},max:40},
+      y:{grid:{display:false},ticks:{color:'#94A3B8'}}}}
+});
+
+new Chart(document.getElementById('cPlatformScale'),{
+  type:'line',
+  data:{
+    labels:['Launch','M6','Y1','Y2','Y3','Y4','Y5','Y6','Y7','Y8','Y9','Y10'],
+    datasets:[
+      {label:'Connect Users (M)',data:[0.2,1.5,5,10,18,24,30,36,40,44,47,50],
+        borderColor:'#00E5A0',backgroundColor:'rgba(0,229,160,0.06)',fill:true,tension:0.4,pointRadius:3,borderWidth:2},
+      {label:'Ops Staff Accounts',data:[200,800,2000,5000,8000,12000,16000,18000,20000,22000,24000,25000],
+        borderColor:'#00B4FF',fill:false,tension:0.4,pointRadius:2,borderWidth:1.5,borderDash:[4,3]},
+      {label:'Command Users',data:[20,50,100,200,300,400,500,550,600,650,700,750],
+        borderColor:'#F59E0B',fill:false,tension:0.4,pointRadius:2,borderWidth:1.5,borderDash:[6,4]}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#94A3B8',boxWidth:10,padding:14}},tooltip:TT},
+    scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569'}},
+      y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569'}}}}
+});
+
+new Chart(document.getElementById('cNotif'),{
+  type:'doughnut',
+  data:{
+    labels:['Payment Reminders','Grid Status Alerts','Usage Milestones','Safety Tips','Fault Notifications','Offer/Promos'],
+    datasets:[{data:[28,24,18,14,10,6],
+      backgroundColor:['#F59E0B','#EF4444','#8B5CF6','#00E5A0','#00B4FF','#6B7280'],
+      borderColor:'rgba(4,6,15,0.8)',borderWidth:3,hoverOffset:6}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+    plugins:{legend:{position:'bottom',labels:{color:'#94A3B8',boxWidth:10,padding:10,font:{size:10}}},tooltip:TT}}
+});
+
+} catch(e){ console.warn('Chart error:', e); }
+
+
+document.body.classList.add('js-ready');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, {threshold: 0.03, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+setTimeout(() => {
+  document.querySelectorAll('.fi:not(.vis)').forEach(el => el.classList.add('vis'));
+}, 2000);
+
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if(!nav) return;
+  if(window.scrollY > 70) {
+    nav.style.padding='10px 48px';
+    nav.style.borderBottomColor='rgba(139,92,246,0.15)';
+  } else {
+    nav.style.padding='14px 48px';
+    nav.style.borderBottomColor='rgba(255,255,255,0.06)';
+  }
+});
+
+</script>
+</body>
+</html>
